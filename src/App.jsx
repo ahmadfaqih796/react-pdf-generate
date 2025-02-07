@@ -7,11 +7,13 @@ import "./styles/main.style.css";
 import ConvertService from "./services/ConvertService";
 import { decodeBase64 } from "./utils/convertBase64";
 import GeneratePdfV1 from "./pages/GeneratePdfV1";
+import GeneratePdfV2 from "./pages/GeneratePdfV2";
 
 function App() {
   return (
     <>
-      <GeneratePdfV1 />
+      {/* <GeneratePdfV1 /> */}
+      <GeneratePdfV2 />
     </>
   );
 }
