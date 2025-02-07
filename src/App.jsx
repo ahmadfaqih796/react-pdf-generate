@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import ConvertService from "./services/ConvertService";
+import { decodeBase64 } from "./utils/convertBase64";
 
 function App() {
   const [convert, setConvert] = useState(null);
@@ -35,19 +36,12 @@ function App() {
   const handleReset = () => {
     setConvert(null);
   };
-  console.log("ccccccc", convert);
 
   const handleShow = React.useCallback(
     (e) => {
       e.preventDefault();
       if (convert && convert.FileData) {
-        const binaryData = atob(convert.FileData);
-        const bytes = new Uint8Array(binaryData.length);
-        for (let i = 0; i < binaryData.length; i++) {
-          bytes[i] = binaryData.charCodeAt(i);
-        }
-        const blob = new Blob([bytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
+        const url = decodeBase64(convert.FileData, "application/pdf");
         window.open(url, "_blank");
       }
     },
@@ -59,14 +53,7 @@ function App() {
       e.preventDefault();
       if (convert && convert.FileData) {
         // Decode base64 to binary
-        const binaryData = atob(convert.FileData);
-        const bytes = new Uint8Array(binaryData.length);
-        for (let i = 0; i < binaryData.length; i++) {
-          bytes[i] = binaryData.charCodeAt(i);
-        }
-        const blob = new Blob([bytes], { type: "application/pdf" });
-        const url = URL.createObjectURL(blob);
-
+        const url = decodeBase64(convert.FileData, "application/pdf");
         const link = document.createElement("a");
         link.href = url;
         link.download = convert.FileName;
@@ -92,7 +79,15 @@ function App() {
         <button onClick={handleShow}>View</button>
         <button onClick={handleDownload}>Download</button>
       </div>
-      {/* <div>{convert}</div> */}
+      <div>
+        {convert?.FileData && (
+          <iframe
+            src={decodeBase64(convert.FileData, "application/pdf")}
+            width="100%"
+            height="600px"
+          ></iframe>
+        )}
+      </div>
     </main>
   );
 }
