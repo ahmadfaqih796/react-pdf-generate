@@ -7,6 +7,7 @@ import { decodeBase64 } from "./utils/convertBase64";
 
 function App() {
   const [convert, setConvert] = useState(null);
+  const [show, setShow] = useState(false);
 
   const handleSubmit = React.useCallback(async (e) => {
     e.preventDefault();
@@ -35,11 +36,13 @@ function App() {
 
   const handleReset = () => {
     setConvert(null);
+    setShow(false);
   };
 
   const handleShow = React.useCallback(
     (e) => {
       e.preventDefault();
+      // setShow(true);
       if (convert && convert.FileData) {
         const url = decodeBase64(convert.FileData, "application/pdf");
         window.open(url, "_blank");
@@ -76,11 +79,11 @@ function App() {
         </button>
       </form>
       <div>
-        <button onClick={handleShow}>View</button>
+        <button onClick={() => setShow(!show)}>View</button>
         <button onClick={handleDownload}>Download</button>
       </div>
       <div>
-        {convert?.FileData && (
+        {show && convert?.FileData && (
           <iframe
             src={decodeBase64(convert.FileData, "application/pdf")}
             width="100%"
