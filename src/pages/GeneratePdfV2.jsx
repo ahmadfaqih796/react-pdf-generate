@@ -6,8 +6,15 @@ const GeneratePdfV2 = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const file = formData.get("file");
+    formData.append('file', file); 
+
     try {
-      const response = await NanoService.post(file, {});
+      const config = {
+        withCredentials: true  
+      };
+
+      console.log(config);
+      const response = await NanoService.post(formData, config);
       console.log("masuk", response);
       alert("File uploaded successfully");
     } catch (error) {
